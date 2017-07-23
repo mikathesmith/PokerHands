@@ -1,1 +1,4 @@
 6s/3d/KS/Ad/13C 
+As/3d/QS/Ad/13C 
+As/As/QS/Ad/As 
+hello 
