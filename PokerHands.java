@@ -1,9 +1,13 @@
+/*
+ * Etude 3: Poker Hands
+ * Author : Mika Smith
+ * 
+ * This program takes in a line of input as 5 cards in a hand in poker,
+ * validates it and prints the hand in ascending value. 
+ */
+
 import java.io.*;
 import java.util.*;
-import java.util.Map.Entry;
-
-import javax.smartcardio.Card;
-
 
 public class PokerHands{
 	
@@ -12,7 +16,11 @@ public class PokerHands{
 	private static ArrayList<Character> suits = new ArrayList<Character>(); 
 	private static ArrayList<Character> seperators = new ArrayList<Character>();
 	public static ArrayList<Card<Integer, Character>> hand;
+	public static char seperatorType; 
 	
+	/*
+	 * Constructor to initialise values. 
+	 */
 	public PokerHands(){
 		order = new int[]{2,3,4,5,6,7,8,9,10,11,12,13,1};
 		hand = new ArrayList<Card<Integer, Character>>();
@@ -32,10 +40,6 @@ public class PokerHands{
 		seperators.add('-');
 	}
 	
-	public static boolean isSeperator(char c){
-		return seperators.contains(c);
-	}
-	
 	public static void main(String[]args){
 		
 		Scanner sc = new Scanner(System.in);
@@ -46,11 +50,10 @@ public class PokerHands{
 			Card<Integer,Character> card;
 			Boolean valid = true; 
 			String numString="";
-			//Random initialising. Must reset after each card! 
 			int num=0;
 			char suit='#'; 
+			seperatorType = '#';
 			//TODO: NOT SCANNING IN LAST ONE DUE TO NOT FINDING A SEPERATOR- after count 5 then stop? 
-		//	boolean isThisSeperator; to stick to one type of seperator
 			
 			for(int i=0; i<line.length();i++){
 				char c = line.charAt(i); //scan in every char 
@@ -63,8 +66,6 @@ public class PokerHands{
 				}else if(suits.contains(Character.toUpperCase(c))){
 					suit = Character.toUpperCase(c);
 				}else if(isSeperator(c)){
-					
-				//	System.out.println("Found seperator");
 					card = new Card<Integer,Character>(num, suit); 
 			//TODO: this does not work as cards have different hashcodes. 
 					if(hand.contains(card)){ //hand doesn't contain this card
@@ -211,6 +212,24 @@ public class PokerHands{
 		}else{
 			return 1; 
 		}
+	}
+	
+	/*
+	 * This method returns true if a character is a seperator and is the 
+	 * specified type of seperator for this line 
+	 */
+	public static boolean isSeperator(char c){
+		if(seperators.contains(c)){
+			if(seperatorType=='#'){
+				seperatorType = c; //set new seperator type as this char
+				return true;
+			}else if(c==seperatorType){
+				return true; 
+			}else{
+				return false; 
+			}
+		}
+		return false;
 	}
 
 	/* 
