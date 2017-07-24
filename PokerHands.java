@@ -17,6 +17,7 @@ public class PokerHands{
 	private static ArrayList<Character> seperators = new ArrayList<Character>();
 	public static ArrayList<Card<Integer, Character>> hand;
 	public static char seperatorType; 
+	public static Boolean valid;
 	
 	/*
 	 * Constructor to initialise values. 
@@ -40,6 +41,10 @@ public class PokerHands{
 		seperators.add('-');
 	}
 	
+	/*
+	 * The main method scans in lines as individual poker hands
+	 * and sorts the cards in each line in ascending order of value. 
+	 */
 	public static void main(String[]args){
 		
 		Scanner sc = new Scanner(System.in);
@@ -48,7 +53,7 @@ public class PokerHands{
 			String line = sc.nextLine(); 
 			
 			Card<Integer,Character> card;
-			Boolean valid = true; 
+			valid = true; 
 			String numString="";
 			int num=0;
 			char suit='#'; 
@@ -56,52 +61,42 @@ public class PokerHands{
 			//TODO: NOT SCANNING IN LAST ONE DUE TO NOT FINDING A SEPERATOR- after count 5 then stop? 
 			
 			for(int i=0; i<line.length();i++){
-				char c = line.charAt(i); //scan in every char 
+				char c = Character.toUpperCase(line.charAt(i)); //scan in every char 
 				
-				if(Character.isDigit(c)){ 
-					numString += c; //add to current number as it could be a double digit
-					num = Integer.parseInt(numString);
+				if(Character.isDigit(c)){
+					//Check if integer is in range
+					if(Integer.parseInt(Character.toString(c))>0 && Integer.parseInt(Character.toString(c))<14){
+						numString += c; //add to current number as it could be a double digit
+						num = Integer.parseInt(numString);
+					}else{
+						valid = false; 
+					}
 				}else if(nums.containsKey(c)){
 					num = nums.get(c); 
-				}else if(suits.contains(Character.toUpperCase(c))){
-					suit = Character.toUpperCase(c);
-				}else if(isSeperator(c)){
+				}else if(suits.contains(c)){
+					//Reached the end of a card so add it to the hand. 
+					suit = c;
 					card = new Card<Integer,Character>(num, suit); 
-			//TODO: this does not work as cards have different hashcodes. 
-					if(hand.contains(card)){ //hand doesn't contain this card
-						System.out.println("Duplicate card!");
-						valid = false; 
-					}else{
-						hand.add(card);
-					}
-					
-				//	System.out.println("Hand size is "+ hand.size());
-					//Resetting variables
+					hand.add(card);
+				}else if(isSeperator(c)){
+					//Reset variables for next card. 
 					num = 0;
 					numString = "";
 					suit = '#';
-				}else{
+				}else{ //Not a valid character 
 					valid = false; 
 				}
-				
-			
 			}
 			
-			if(hand.size()!=5 || !valid){
+			//Check validity and sort hand 
+			sortHand();
+			
+			if(hand.size()!=5 || !valid){ 
 				System.out.println("Invalid: " + line);
 			}else{
-			/*	System.out.println("Unsorted: ");
 				for(Card<Integer, Character> c: hand){
 					System.out.print(c.getNumber() + "" + c.getSuit()+" ");
 				}
-				System.out.println();*/
-				sortHand();
-				
-				//System.out.println("\nSorted: ");
-				for(Card<Integer, Character> c: hand){
-					System.out.print(c.getNumber() + "" + c.getSuit()+" ");
-				}
-				System.out.println();
 				System.out.println();
 			}				
 		}
@@ -111,13 +106,20 @@ public class PokerHands{
 	
 	/*
 	 * Uses insertion sort to sort the hand as it is a small set of numbers with a 
-	 * small range. 
+	 * small range. While we are comparing, it also checks if the cards are identical,
+	 * in which case the hand will be invalid. 
 	 */
 	public static void sortHand(){    
 		//for each value in the hand. 
 		for(int i=1; i < hand.size(); i++){
 	        Card<Integer, Character> value = hand.get(i);
 	        int j = i-1;
+	        
+	        //Checks if these are the same card. 
+	        if(compare(value, hand.get(j))==0){
+				valid = false; //The hand is invalid if there is a duplicate
+			}
+	        
 	        while(j>=0 && compare(value, hand.get(j))==-1){
 	        	//Swaps values. 
 	        	Card<Integer, Character> temp = hand.get(j);
@@ -135,7 +137,7 @@ public class PokerHands{
 	public static int compare(Card<Integer, Character> x, Card<Integer, Character> y){
 		if(x.getNumber() != y.getNumber()){
 			return compareNumValue(x.getNumber(), y.getNumber());
-		}else{
+		}else{ //will only compare if numbers are equal 
 			return compareSuit(x.getSuit(), y.getSuit());
 		}
 	}
@@ -185,8 +187,6 @@ public class PokerHands{
 		int ycount = 0; 
 		boolean xfin = false;
 		boolean yfin = false; 
-		//System.out.println("Comparing " + x + " and " + y);
-		
 		for(int i: order){
 			if(x == i){ 
 				xfin = true; 
