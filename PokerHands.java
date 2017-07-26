@@ -27,6 +27,7 @@ public class PokerHands{
 		hand = new ArrayList<Card<Integer, Character>>();
 		
 		nums.put('A',1);
+		nums.put('T', 10);
 		nums.put('J', 11);
 		nums.put('Q', 12);
 		nums.put('K', 13);
@@ -58,17 +59,15 @@ public class PokerHands{
 			int num=0;
 			char suit='#'; 
 			seperatorType = '#';
-			//TODO: NOT SCANNING IN LAST ONE DUE TO NOT FINDING A SEPERATOR- after count 5 then stop? 
 			
 			for(int i=0; i<line.length();i++){
 				char c = Character.toUpperCase(line.charAt(i)); //scan in every char 
 				
 				if(Character.isDigit(c)){
 					//Check if integer is in range
-					if(Integer.parseInt(Character.toString(c))>0 && Integer.parseInt(Character.toString(c))<14){
-						numString += c; //add to current number as it could be a double digit
-						num = Integer.parseInt(numString);
-					}else{
+					numString += c; //add to current number as it could be a double digit
+					num = Integer.parseInt(numString);
+					if(num<= 0 || num > 13){
 						valid = false; 
 					}
 				}else if(nums.containsKey(c)){

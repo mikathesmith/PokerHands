@@ -1,6 +1,8 @@
 6s/3d/KS/Ad/13C
 As/3d/QS/ad/13C
 as/3d/QS/Ad/13C
+as/3d/QS/Td/13C
+
 as/3d/QS/Ad/14C
 As/3d/QS/Ad/13C
 As/As/QS/Ad/As/
