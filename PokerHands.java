@@ -93,8 +93,10 @@ public class PokerHands{
 			if(hand.size()!=5 || !valid){ 
 				System.out.println("Invalid: " + line);
 			}else{
+				
+				//Print out as letter not number for K, Q, T, J, A
 				for(Card<Integer, Character> c: hand){
-					System.out.print(c.getNumber() + "" + c.getSuit()+" ");
+					System.out.print((nums.contains(c.getNumber()) ? nums.get(c.getNumber()) : c.getNumber()) + "" + c.getSuit()+" ");
 				}
 				System.out.println();
 			}				
