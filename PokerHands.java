@@ -27,7 +27,7 @@ public class PokerHands{
 		hand = new ArrayList<Card<Integer, Character>>();
 		
 		nums.put('A',1);
-		nums.put('T',10);
+		nums.put('T', 10);
 		nums.put('J', 11);
 		nums.put('Q', 12);
 		nums.put('K', 13);
@@ -65,10 +65,9 @@ public class PokerHands{
 				
 				if(Character.isDigit(c)){
 					//Check if integer is in range
-					if(Integer.parseInt(Character.toString(c))>=1 && Integer.parseInt(Character.toString(c))<=9){
-						numString += c; //add to current number as it could be a double digit
-						num = Integer.parseInt(numString);
-					}else{
+					numString += c; //add to current number as it could be a double digit
+					num = Integer.parseInt(numString);
+					if(num<= 0 || num > 13){
 						valid = false; 
 					}
 				}else if(nums.containsKey(c)){
@@ -94,8 +93,10 @@ public class PokerHands{
 			if(hand.size()!=5 || !valid){ 
 				System.out.println("Invalid: " + line);
 			}else{
+				
+				//Print out as letter not number for K, Q, T, J, A
 				for(Card<Integer, Character> c: hand){
-					System.out.print(c.getNumber() + "" + c.getSuit()+" ");
+					System.out.print((nums.contains(c.getNumber()) ? nums.get(c.getNumber()) : c.getNumber()) + "" + c.getSuit()+" ");
 				}
 				System.out.println();
 			}				
