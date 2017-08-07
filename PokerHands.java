@@ -93,12 +93,29 @@ public class PokerHands{
 			if(hand.size()!=5 || !valid){ 
 				System.out.println("Invalid: " + line);
 			}else{
+				StringBuilder sb = new StringBuilder(); 
 				
 				//Print out as letter not number for K, Q, T, J, A
 				for(Card<Integer, Character> c: hand){
-					System.out.print((nums.contains(c.getNumber()) ? nums.get(c.getNumber()) : c.getNumber()) + "" + c.getSuit()+" ");
+					//print number as letter
+					
+					int n = c.getNumber(); 
+					Boolean added = false; 
+					//for each entry, if n is = to the value, then get the key 
+					for(Map.Entry<Character, Integer> x : nums.entrySet()){
+						if(n==x.getValue()){
+							sb.append(x.getKey());
+							added = true; 
+							break; 
+						}
+					}
+					if(!added){
+						sb.append(n);
+					}
+					sb.append(c.getSuit()+" ");
 				}
-				System.out.println();
+				System.out.println(sb.toString());
+				//System.out.println();
 			}				
 		}
 		
